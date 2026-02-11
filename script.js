@@ -2,6 +2,8 @@
 const generateBtn = document.getElementById("generate-btn");
 const paletteContainer = document.querySelector(".palette-container");
 
+let colors;
+
 generateBtn.addEventListener("click", generatePalette);
 paletteContainer.addEventListener("click", (e) => {
     // find the closest copy button/icon in case the user clicks an inner <i> or child element
@@ -15,6 +17,7 @@ paletteContainer.addEventListener("click", (e) => {
             // prefer the icon element if present, otherwise use the button itself
             const icon = copyBtn.querySelector("i") || copyBtn;
             showCopySuccess(icon);
+            showBubble("Copied " + hexValue);
         })
         .catch((err) => console.log(err));
         return;
@@ -63,7 +66,7 @@ function showCopySuccess(element){
 //
 
     function generatePalette() {
-        const colors = [];
+        colors = [];
 
         // Make our first color, this is our primary color.
         const primary = {
@@ -119,7 +122,7 @@ function showCopySuccess(element){
 
     function makeVariant(h, s, v) {
         let changedFlag = false;
-        
+
         // 66% chance to change the Hue
         if (Math.random() < 0.66) {
             changedFlag = true;
@@ -137,15 +140,15 @@ function showCopySuccess(element){
         }
 
         // 33% chance to change the Saturation
-        if (Math.random() < 0.33) {
+        if (Math.random() < 0.25) {
             changedFlag = true;
-            s *= 0.25 + Math.random() * 0.75;
+            s *= Math.random() * 0.5;
         }
 
         // 33% chance to change the value
-        if (Math.random() < 0.33) {
+        if (Math.random() < 0.25) {
             changedFlag = true;
-            v *= 0.25 + Math.random() * 0.75;
+            v *= 0.5 + Math.random() * 0.5;
         }
 
         // If no changes were made, do it again.
@@ -173,4 +176,100 @@ function updatePaletteDisplay(colors){
 
 
 
-// generatePalette() // if you want to generate a new color palette every time you reload or visit, remove to have the default
+generatePalette() // if you want to generate a new color palette every time you reload or visit, remove to have the default
+
+
+//
+// SAVING
+//
+
+const savePaletteButton = document.getElementById("save-btn");
+const savedPalettesElement = document.getElementById("saved-palettes");
+
+let saved = JSON.parse(localStorage.getItem("savedPalettes")) ?? [];
+
+// Save button
+savePaletteButton.addEventListener("click", () => {
+    if (saved.includes(colors)) {
+        showBubble("This color palette is already saved");
+    } else {
+        saved.push(colors);
+        updateStorage();
+        renderSavedPalettes();
+        showBubble("Color palette saved!")
+    }
+})
+
+
+function updateStorage() {
+    // localStorage only accepts strings, so first convert the array to a string.
+    localStorage.setItem("savedPalettes", JSON.stringify(saved));
+}
+
+function renderSavedPalettes() {
+    // Clear everything first
+    savedPalettesElement.innerHTML = "";
+
+    // Then add each row one by one
+    saved.forEach((palette) => {
+        const row = createRow(palette);
+        savedPalettesElement.appendChild(row);
+    })
+}
+
+function createRow(palette) {
+    // Make a <div className="saved-row"> </div>
+    const row = document.createElement("div");
+    row.classList.add("saved-row");
+    
+    // Add necessary children inside this <div>
+    for (let i = 0; i < palette.length; i++) {
+        row.innerHTML += `<div title="${palette[i]}" style="background-color: ${palette[i]}">`;
+    }
+
+    // Listen for any clicks on the color divs
+    row.addEventListener("click", (e) => {
+        const foundHex = e.target.getAttribute("title");
+        if (foundHex) {
+            navigator.clipboard.writeText(foundHex)
+            .then(() => {
+                showBubble("Copied " + foundHex);
+            })
+        }
+    })
+
+    // Configure how the delete button works and add it in as well
+    const delButton = document.createElement("button");
+    delButton.innerHTML = `<i class="fa-solid fa-trash"></i>`;
+    delButton.addEventListener("click", () => {
+        const confirmed = window.confirm("Confirm delete?");
+        if (confirmed) {
+            const indexToDelete = saved.indexOf(palette);
+            saved.splice(indexToDelete, 1);
+            renderSavedPalettes();
+            updateStorage();
+            showBubble("Color palette deleted");
+        }
+    });
+    row.appendChild(delButton);
+
+    return row; 
+}
+
+
+
+const bubbleElement = document.getElementById("bubble");
+let bubbleTimeout;
+
+function showBubble(message) {
+    // "Postpone" hiding
+    clearTimeout(bubbleTimeout);
+
+    bubbleElement.textContent = message;
+
+    // Show -> 3 seconds -> Hide
+    bubbleElement.classList.add("shown");
+    bubbleTimeout = setTimeout(() => bubbleElement.classList.remove("shown"), 3000);
+}
+
+renderSavedPalettes()

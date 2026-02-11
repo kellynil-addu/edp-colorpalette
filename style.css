@@ -16,8 +16,6 @@ body{
     background: linear-gradient(135deg, #F63049, #111F35);
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
-    gap: 2rem;
     align-items: center;
     justify-content: center;
     padding: 20px;
@@ -89,15 +87,20 @@ h1::after{
     animation: gradientAnimation 5s linear infinite;
 }
 
+h2 {
+    margin-top: 24px;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
 @keyframes gradientAnimation {
     to{
         background-position: 200%;
     }
 }
 
-#generate-btn{
-    background: linear-gradient(45deg, #F63049, #111F35);
-    color: white;
+.large-btn {
+    background: lightgray;
     border: none;
     padding: 0.8rem 1.5rem;
     border-radius: 50px;
@@ -108,16 +111,22 @@ h1::after{
     position: relative;
 }
 
-#generate-btn:hover{
+.large-btn:hover{
     translate: 0 -2px;
     box-shadow: 0 6px 10px rgba(71, 25, 25, 0.3);
 }
 
-#generate-btn:active{
+.large-btn:active{
     translate: 0;
 }
 
+#generate-btn {
+    background: linear-gradient(45deg, #F63049, #111F35);
+    color: white;
+}
+
 .palette-container{
+    margin-bottom: 2rem;
     display: grid;
     gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -167,4 +176,63 @@ h1::after{
     .palette-container{
         grid-template-columns: repeat(auto-fit,minmax(100px, 1fr));
     }
+}
+
+/* Saving */
+
+/* The whole section */
+#saved-palettes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Container for each saved palette */
+.saved-row {
+    /* width: 100%; */
+    padding: 6px;
+    border-radius: 32px;
+    border: 2px solid darkgray;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* This refers to the delete button */
+.saved-row > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    margin: 0;
+    padding: 0;
+    min-height: 42px;
+    min-width: 42px;
+    border: 2px solid lightgray;
+    cursor: pointer;
+}
+
+/* Make everything inside a circle */
+.saved-row > div, .saved-row > button {
+    cursor: pointer;
+    min-height: 42px;
+    min-width: 42px;
+    border-radius: 100%;
+}
+
+#bubble {
+    opacity: 0;
+    z-index: 1;
+    position: absolute;
+    background-color: #000000b7;
+    color: white;
+    padding: 1rem;
+    border-radius: 2rem;
+    bottom: 2rem;
+    transition: opacity 0.5s ease;
+}
+
+#bubble.shown {
+    opacity: 1;
 }

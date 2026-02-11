@@ -9,31 +9,32 @@
     <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+    
     <div class="container">
         <h1>Color Palatte Generator</h1>
-        <button id="generate-btn">
+        <button class="large-btn" id="generate-btn">
             <i class="fas fa-sync-alt"></i>
             Generate Palette
         </button>
-
+        
         <div class="palette-container">
             <!-- COLOR BOX 1 -->
-              <div class="color-box">
+            <div class="color-box">
                 <div class="color" style="background-color: #F63049;"></div>
                 <div class="color-info">
                     <span class="hex-value">#F63049</span>
                     <i class="far fa-copy copy-btn" title="Copy to Clipboard"></i>
                 </div>
-              </div>
+            </div>
              <!-- COLOR BOX 2 -->
-              <div class="color-box">
+             <div class="color-box">
                 <div class="color" style="background-color: #D02752;"></div>
                 <div class="color-info">
                     <span class="hex-value">#D02752</span>
                     <i class="far fa-copy copy-btn" title="Copy to Clipboard"></i>
                 </div>
               </div>
-             <!-- COLOR BOX 3 -->
+              <!-- COLOR BOX 3 -->
               <div class="color-box">
                 <div class="color" style="background-color: #8A244B;"></div>
                 <div class="color-info">
@@ -48,20 +49,35 @@
                     <span class="hex-value">#111F35</span>
                     <i class="far fa-copy copy-btn" title="Copy to Clipboard"></i>
                 </div>
-              </div>
+            </div>
              <!-- COLOR BOX 5 -->
-              <div class="color-box">
-                <div class="color" style="background-color: #000;"></div>
+             <div class="color-box">
+                 <div class="color" style="background-color: #000;"></div>
                 <div class="color-info">
                     <span class="hex-value">#000000</span>
                     <i class="far fa-copy copy-btn" title="Copy to Clipboard"></i>
                 </div>
               </div>
+            </div>
+            
+            <button id="save-btn" class="large-btn"> Save this palette </button>
+            
+            <h2>Saved palettes</h2>
+            
+            <div id="saved-palettes">
+            <div class="saved-row">
+                <div style="background-color: #F63049;"></div>
+                <div style="background-color: #D02752;"></div>
+                <div style="background-color: #8A244B;"></div>
+                <div style="background-color: #111F35;"></div>
+                <div style="background-color: #000;"></div>
+                <button>  <i class="fa-solid fa-trash"></i> </button>
+            </div>
         </div>
     </div>
-
-    <div class="container">
-        <h2>Sss</h2>
+    
+    <div id="bubble">
+        Copied!
     </div>
 
     <script src="script.js"></script>
