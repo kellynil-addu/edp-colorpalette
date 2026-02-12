@@ -34,6 +34,7 @@ paletteContainer.addEventListener("click", (e) => {
             const copyBtnEl = details ? details.querySelector(".copy-btn") : null;
             const icon = copyBtnEl ? (copyBtnEl.querySelector("i") || copyBtnEl) : null;
             if (icon) showCopySuccess(icon);
+            showBubble("Copied " + hexValue);
         })
         .catch((err) => console.log(err));
     }
@@ -81,7 +82,15 @@ function showCopySuccess(element){
         let variant = {...primary};
         for (let i = 0; i < 4; i++) {
             variant = makeVariant(variant.h, variant.s, variant.v);
-            colors.push(hsvToHex(variant.h, variant.s, variant.v));
+
+            const hex = hsvToHex(variant.h, variant.s, variant.v);
+
+            if (colors.includes(hex)) {
+                generatePalette(); // Our palette should not have any duplicates. Start all over again.
+                return;
+            }
+
+            colors.push(hex);
         }
 
         updatePaletteDisplay(colors);
